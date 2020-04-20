@@ -1,0 +1,592 @@
+.alarm-unclassified {
+  background-color: rgba(172, 187, 194, .1);
+  border-color: rgba(172, 187, 194, .2);
+  color: #ACBBC2;
+}
+
+.alarm-information {
+  background-color: rgba(116, 153, 255, .1);
+  border-color: rgba(116, 153, 255, .2);
+  color: #7499FF;
+}
+
+.alarm-warning {
+  background-color: rgba(255, 200, 89, .1);
+  border-color: rgba(255, 200, 89, .2);
+  color: #FFC859;
+}
+
+.alarm-average {
+  background-color: rgba(255, 160, 89, .1);
+  border-color: rgba(255, 160, 89, .2);
+  color: #FFA059;
+}
+
+.alarm-high {
+  background-color: rgba(233, 118, 89, .1);
+  border-color: rgba(233, 118, 89, .2);
+  color: #E97659;
+}
+
+.alarm-disaster {
+  background-color: rgba(228, 89, 89, .1);
+  border-color: rgba(228, 89, 89, .2);
+  color: #E45959;
+}
+
+.device-normal {
+  background-color: rgba(66, 158, 71, .1);
+  border-color: rgba(66, 158, 71, .2);
+  color: #429e47;
+}
+
+.device-no-monitoring {
+  background-color: rgba(242, 79, 29, .1);
+  border-color: rgba(242, 79, 29, .2);
+  color: #f24f1d;
+}
+
+// 告警规则的样式  todo 改变告警等级复选框的颜色有没有更好的做法
+.trigger-severity-batch {
+  .el-checkbox-button__inner {
+    background: none;
+  }
+  .el-radio-button__inner {
+    background: none;
+  }
+  .trigger-severity-unclassified {
+    .el-checkbox-button__inner {
+      background: #ACBBC2;
+
+    }
+    .el-radio-button__inner {
+      background: #ACBBC2;
+      height: 28px;
+      margin-bottom: 6px;
+    }
+  }
+  .trigger-severity-information {
+    .el-checkbox-button__inner {
+      background: #7499FF;
+    }
+    .el-radio-button__inner {
+      background: #7499FF;
+      height: 28px;
+      margin-bottom: 6px;
+    }
+  }
+  .trigger-severity-warning {
+    .el-checkbox-button__inner {
+      background: #FFC859;
+    }
+    .el-radio-button__inner {
+      background: #FFC859;
+      height: 28px;
+      margin-bottom: 6px;
+    }
+  }
+  .trigger-severity-average {
+    .el-checkbox-button__inner {
+      background: #FFA059;
+    }
+    .el-radio-button__inner {
+      background: #FFA059;
+      height: 28px;
+      margin-bottom: 6px;
+    }
+  }
+  .trigger-severity-high {
+    .el-checkbox-button__inner {
+      background: #E97659;
+    }
+    .el-radio-button__inner {
+      background: #E97659;
+      height: 28px;
+      margin-bottom: 6px;
+    }
+  }
+  .trigger-severity-disaster {
+    .el-checkbox-button__inner {
+      background: #E45959;
+    }
+    .el-radio-button__inner {
+      background: #E45959;
+      height: 28px;
+      margin-bottom: 6px;
+    }
+  }
+  .el-checkbox-button.is-checked .el-checkbox-button__inner {
+    background-color: #409EFF;
+  }
+  .el-radio-button__orig-radio:checked + .el-radio-button__inner {
+    background-color: #409EFF;
+  }
+}
+
+.message-unSupport {
+  background-color: rgba(172, 187, 194, .1);
+  border-color: rgba(172, 187, 194, .2);
+  color: #ACBBC2;
+}
+
+.message-warning {
+  background-color: rgba(255, 200, 89, .1);
+  border-color: rgba(255, 200, 89, .2);
+  color: #FFC859;
+}
+
+.message-problem {
+  background-color: rgba(233, 118, 89, .1);
+  border-color: rgba(233, 118, 89, .2);
+  color: #e98a37;
+}
+
+.message-error {
+  background-color: rgba(228, 89, 89, .1);
+  border-color: rgba(228, 89, 89, .2);
+  color: #E45959;
+}
+
+.ce-tag-transparency {
+  background-color: transparent;
+  border-color: #ebeef5;
+  color: #000000;
+  text-align: center;
+  font-size: small;
+}
+
+.ce-tag-green {
+  background-color: #429e47;
+  border-color: #429e47;
+  color: #ebeef5;
+  text-align: center;
+  font-size: small;
+}
+
+.link-type,
+.link-type:focus {
+  color: #337ab7;
+  cursor: pointer;
+  &:hover {
+    color: rgb(32, 160, 255);
+  }
+}
+.topoMenu,
+.topoMenu:focus {
+  color: #575757;
+  cursor: pointer;
+  &:hover {
+    color: rgb(32, 160, 255);
+  }
+}
+
+
+.link-type-gray,
+.link-type-gray:focus {
+  color: #768d99;
+  cursor: pointer;
+  &:hover {
+    color: rgb(32, 160, 255);
+  }
+}
+
+.link-type-green,
+.link-type-green:focus {
+  color: #429e47;
+  cursor: pointer;
+
+  &:hover {
+    color: rgb(32, 160, 255);
+  }
+}
+
+.link-type-yellow,
+.link-type-yellow:focus {
+  color: #ffc859;
+  cursor: pointer;
+
+  &:hover {
+    color: rgb(32, 160, 255);
+  }
+}
+
+.link-type-red,
+.link-type-red:focus {
+  color: #f24f1d;
+  cursor: pointer;
+  &:hover {
+    color: #f24f1d;
+  }
+}
+
+.link-type-black,
+.link-type-black:focus {
+  color: #000000;
+  cursor: pointer;
+  &:hover {
+    color: rgb(32, 160, 255);
+  }
+}
+
+.text-type-green {
+  color: #429e47;
+}
+
+.text-type-red {
+  color: #f24f1d;
+}
+
+.text-type-gray {
+  color: #768d99;
+}
+
+.error-tip {
+  color: #e33734;
+  white-space: pre-line;
+}
+
+.text-type-black {
+  color: #000000;
+  //background-color: #429e47;
+}
+
+.filter-container {
+  padding-left: 15px;
+  padding-bottom: 10px;
+  .filter-item {
+    display: inline-block;
+    vertical-align: middle;
+    margin-bottom: 10px;
+  }
+}
+
+.condition-container {
+  padding-top: 5px;
+  padding-bottom: 5px;
+  .condition-item {
+    vertical-align: middle;
+    margin-bottom: 10px !important;
+  }
+}
+
+.stat-container {
+  padding-left: 15px;
+  padding-bottom: 5px;
+  .stat-item {
+    //display: inline-block;
+    vertical-align: middle;
+    margin-bottom: 0px !important;
+  }
+}
+
+/**
+Form的Item显示
+ */
+.ce-width-max {
+  width: 800px;
+}
+
+.ce-width-longer {
+  width: 600px;
+}
+
+.ce-width-medium {
+  width: 400px;
+}
+
+.ce-width-small {
+  width: 200px;
+}
+
+.ce-width-mini {
+  width: 100px;
+}
+
+.ce-row-bottom {
+  margin-bottom: 5px;
+}
+
+/**
+对话框分内外展现
+ */
+.ce-modal-content {
+  margin-top: -20px;
+  margin-bottom: -40px;
+}
+
+.ce-modal-header {
+  border-radius: 4px 4px 0 0;
+  background: #fff;
+  color: rgba(0, 0, 0, .65);
+  border-bottom: 1px solid #e8e8e8;
+}
+
+.ce-modal-footer {
+  border-top: 1px solid #e8e8e8;
+  margin-bottom: -10px;
+  padding: 10px 10px;
+  text-align: right;
+  border-radius: 0 0 4px 4px;
+}
+/**
+全局button按钮样式
+ */
+
+/**
+全局弹出框样式
+ */
+.el-dialog  {
+  border-radius: 10px;
+}
+.el-dialog__header{
+  background-color: #d6d6d6;
+  border-radius: 10px 10px 0 0 ;
+  box-shadow:0px 8px 10px -15px #261507;
+  height: 55px;
+  text-align: center;
+  font-size: small;
+}
+
+/**
+对话框内部一体化的展现
+ */
+.ce-internal-content {
+  margin-top: -14px;
+  margin-bottom: -20px;
+}
+
+.ce-internal-header {
+  border-radius: 4px 4px 0 0;
+  background: #fff;
+  color: rgba(0, 0, 0, .65);
+  margin-buttom: 10px;
+  font-size: 16px;
+  font-weight: bold;
+  border-bottom: 1px solid #e8e8e8;
+
+}
+
+.ce-modal-item {
+  width: 100%;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.ce-internal-footer {
+  margin-top: 10px;
+  border-top: 1px solid #e8e8e8;
+  padding: 10px 10px;
+  text-align: right;
+  border-radius: 0 0 4px 4px;
+}
+
+.host-navbar {
+  height: 40px;
+
+  .label-title {
+    display: inline-block;
+    font-size: small;
+    margin-left: 10px;
+    font-weight: normal;
+  }
+
+  .item-container {
+    display: inline-block;
+    margin-left: 10px;
+    padding-left: 10px;
+  }
+}
+
+/*上面的导航栏*/
+.top-navbar {
+  height: 40px;
+  margin-left: 5px;
+  line-height: 40px;
+  border-radius: 0px !important;
+  .left-container {
+    height: 100%;
+    float: left;
+  }
+  .right-container {
+    float: right;
+    height: 100%;
+    &:focus {
+      outline: none;
+    }
+  }
+
+  .select-left-container {
+    float: left;
+    height: 100%;
+    &:focus {
+      outline: none;
+    }
+  }
+  .label-title {
+    font-weight: bold;
+    font-size: medium;
+  }
+  .label-item {
+    font-size: small;
+  }
+}
+
+.top-second-navbar {
+  height: 20px;
+  margin-left: 5px;
+  line-height: 20px;
+  border-radius: 0px !important;
+  .left-container {
+    height: 100%;
+    float: left;
+  }
+  .right-container {
+    float: right;
+    height: 100%;
+    &:focus {
+      outline: none;
+    }
+  }
+  .label-title {
+    font-weight: bold;
+    font-size: larger;
+  }
+  .label-item {
+    font-size: small;
+  }
+}
+
+.label-item {
+  font-size: small;
+}
+
+/*下面的导航栏*/
+.buttom-navbar {
+  height: 50px;
+  line-height: 50px;
+  border-radius: 0px !important;
+  margin-top: 5px;
+  .left-container {
+    height: 100%;
+    float: left;
+  }
+  .right-container {
+    float: right;
+    padding-top: 10px;
+    height: 100%;
+    &:focus {
+      outline: none;
+    }
+  }
+  .label-title {
+    font-weight: bold;
+  }
+}
+
+.inline-bar {
+  height: 23px;
+  line-height: 23px;
+  border-radius: 0px !important;
+  .left-container {
+    height: 100%;
+    float: left;
+  }
+  .right-container {
+    height: 100%;
+    float: right;
+  }
+}
+
+/*折叠过渡动画效果*/
+.transition-box {
+  margin-bottom: 5px;
+  border-radius: 5px;
+  text-align: left;
+  color: #fff;
+  /*padding: 20px 20px;*/
+  box-sizing: border-box;
+  margin-right: 20px;
+}
+
+.svg-button,
+.svg-button:focus {
+  color: #337ab7;
+  cursor: pointer;
+  &:hover {
+    color: rgb(32, 160, 255);
+  }
+}
+
+// 遮挡层的样式
+.ce-barrier-bed {
+  position: fixed;
+  right: 0;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  z-index: 222;
+  background-color: rgba(0, 0, 0, 0.2);
+}
+
+.host-integration-view {
+  margin: 0;
+  position: fixed;
+  right: 0;
+  top: 50px;
+  bottom: 0;
+  z-index: 223;
+  overflow-y: auto;
+  overflow-x: hidden;
+  background-color: #FFFFFF;
+}
+
+.el-form-item__error {
+  position: static;
+  color: #ff9f4c;
+}
+
+.el-form-item.is-error .el-input__inner, .el-form-item.is-error .el-input__inner:focus, .el-form-item.is-error .el-textarea__inner, .el-form-item.is-error .el-textarea__inner:focus, .el-message-box__input input.invalid, .el-message-box__input input.invalid:focus {
+  border-color: #ff9f4c;
+}
+
+.list-card {
+  width: 300px;
+  float: left;
+  margin: 5px;
+
+  .list-card-label {
+    display: inline-block;
+    width: 70px;
+    text-align: right;
+  }
+
+  .list-card-title-right {
+    text-align: right;
+    float: right
+  }
+
+  .list-card-content {
+    margin-bottom: 5px;
+    margin-top: 5px;
+    line-height: 15px;
+    font-size: small;
+  }
+
+}
+/**
+指标列表这一块的样式
+ */
+.rightMove {
+  width: 79%;
+  float: right;
+}
+
+.leftMove {
+  width: 20%;
+  float: left;
+  box-shadow: 0px 0px 5px 2px #d7d7d7;
+}
+.parent_node {
+  font-weight: bold;
+}
+
