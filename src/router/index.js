@@ -187,8 +187,18 @@ export const asyncRouterMap = [
         component: () => import('@/views/mall/supplier'),
         name: 'supplier',
         meta: {
-          perms: ['GET /admin/brand/list', 'POST /admin/brand/create', 'GET /admin/brand/read', 'POST /admin/brand/update', 'POST /admin/brand/delete'],
+          perms: ['GET /admin/supplier/list', 'POST /admin/supplier/create', 'GET /admin/supplier/read', 'POST /admin/supplier/update', 'POST /admin/supplier/delete'],
           title: '供应商管理',
+          noCache: true
+        }
+      },
+      {
+        path: 'warehouse',
+        component: () => import('@/views/mall/warehouse'),
+        name: 'warehouse',
+        meta: {
+          perms: ['GET /admin/warehouse/list', 'POST /admin/warehouse/create', 'GET /admin/warehouse/read', 'POST /admin/warehouse/update', 'POST /admin/warehouse/delete'],
+          title: '仓库管理',
           noCache: true
         }
       },

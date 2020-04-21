@@ -39,3 +39,11 @@ export function deleteBrand(data) {
     data
   })
 }
+
+export function listBySupplier(supplierId) {
+  return request({
+    url: '/brand/listBySupplier',
+    method: 'get',
+    params: { supplierId }
+  })
+}

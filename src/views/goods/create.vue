@@ -4,9 +4,6 @@
     <el-card class="box-card">
       <h3>商品介绍</h3>
       <el-form ref="goods" :rules="rules" :model="goods" label-width="150px">
-        <el-form-item label="商品编号" prop="goodsSn">
-          <el-input v-model="goods.goodsSn" />
-        </el-form-item>
         <el-form-item label="商品名称" prop="name">
           <el-input v-model="goods.name" />
         </el-form-item>
@@ -15,23 +12,10 @@
             <template slot="append">元</template>
           </el-input>
         </el-form-item>
-        <el-form-item label="是否新品" prop="isNew">
-          <el-radio-group v-model="goods.isNew">
-            <el-radio :label="true">新品</el-radio>
-            <el-radio :label="false">非新品</el-radio>
-          </el-radio-group>
-        </el-form-item>
-        <el-form-item label="是否热卖" prop="isHot">
-          <el-radio-group v-model="goods.isHot">
-            <el-radio :label="false">普通</el-radio>
-            <el-radio :label="true">热卖</el-radio>
-          </el-radio-group>
-        </el-form-item>
-        <el-form-item label="是否在售" prop="isOnSale">
-          <el-radio-group v-model="goods.isOnSale">
-            <el-radio :label="true">在售</el-radio>
-            <el-radio :label="false">未售</el-radio>
-          </el-radio-group>
+        <el-form-item label="成本价" prop="costPrice">
+          <el-input v-model="goods.costPrice" placeholder="0.00">
+            <template slot="append">元</template>
+          </el-input>
         </el-form-item>
 
         <el-form-item label="商品图片">
@@ -45,22 +29,6 @@
           >
             <img v-if="goods.picUrl" :src="goods.picUrl" class="avatar">
             <i v-else class="el-icon-plus avatar-uploader-icon" />
-          </el-upload>
-        </el-form-item>
-
-        <el-form-item label="宣传画廊">
-          <el-upload
-            :action="uploadPath"
-            :limit="5"
-            :headers="headers"
-            :on-exceed="uploadOverrun"
-            :on-success="handleGalleryUrl"
-            :on-remove="handleRemove"
-            multiple
-            accept=".jpg,.jpeg,.png,.gif"
-            list-type="picture-card"
-          >
-            <i class="el-icon-plus" />
           </el-upload>
         </el-form-item>
 
@@ -88,98 +56,19 @@
           <el-cascader :options="categoryList" expand-trigger="hover" clearable @change="handleCategoryChange" />
         </el-form-item>
 
-        <el-form-item label="所属品牌商">
-          <el-select v-model="goods.brandId" clearable>
-            <el-option v-for="item in brandList" :key="item.value" :label="item.label" :value="item.value" />
+        <el-form-item label="所属供应商">
+          <el-select v-model="goods.supplierId" clearable @change="getBrandBySupplier">
+            <el-option v-for="item in supplierList" :key="item.value" :label="item.label" :value="item.value" />
           </el-select>
         </el-form-item>
 
-        <el-form-item label="商品简介">
-          <el-input v-model="goods.brief" />
+        <el-form-item label="所属品牌商" v-if="brandList.length">
+          <el-select v-model="goods.brandId" clearable>
+            <el-option v-for="item in brandList" :key="item.id" :label="item.name" :value="item.id" />
+          </el-select>
         </el-form-item>
 
-        <el-form-item label="商品详细介绍">
-          <editor v-model="goods.detail" :init="editorInit" />
-        </el-form-item>
       </el-form>
-    </el-card>
-
-    <el-card class="box-card">
-      <h3>商品规格</h3>
-      <el-row :gutter="20" type="flex" align="middle" style="padding:20px 0;">
-        <el-col :span="10">
-          <el-radio-group v-model="multipleSpec" @change="specChanged">
-            <el-radio-button :label="false">默认标准规格</el-radio-button>
-            <el-radio-button :label="true">多规格支持</el-radio-button>
-          </el-radio-group>
-        </el-col>
-        <el-col v-if="multipleSpec" :span="10">
-          <el-button :plain="true" type="primary" @click="handleSpecificationShow">添加</el-button>
-        </el-col>
-      </el-row>
-
-      <el-table :data="specifications">
-        <el-table-column property="specification" label="规格名" />
-        <el-table-column property="value" label="规格值">
-          <template slot-scope="scope">
-            <el-tag type="primary">
-              {{ scope.row.value }}
-            </el-tag>
-          </template>
-        </el-table-column>
-        <el-table-column property="picUrl" label="规格图片">
-          <template slot-scope="scope">
-            <img v-if="scope.row.picUrl" :src="scope.row.picUrl" width="40">
-          </template>
-        </el-table-column>
-        <el-table-column
-          v-if="multipleSpec"
-          align="center"
-          label="操作"
-          width="250"
-          class-name="small-padding fixed-width"
-        >
-          <template slot-scope="scope">
-            <el-button type="danger" size="mini" @click="handleSpecificationDelete(scope.row)">删除</el-button>
-          </template>
-        </el-table-column>
-      </el-table>
-
-      <el-dialog :visible.sync="specVisiable" title="设置规格">
-        <el-form
-          ref="specForm"
-          :rules="rules"
-          :model="specForm"
-          status-icon
-          label-position="left"
-          label-width="100px"
-          style="width: 400px; margin-left:50px;"
-        >
-          <el-form-item label="规格名" prop="specification">
-            <el-input v-model="specForm.specification" />
-          </el-form-item>
-          <el-form-item label="规格值" prop="value">
-            <el-input v-model="specForm.value" />
-          </el-form-item>
-          <el-form-item label="规格图片" prop="picUrl">
-            <el-upload
-              :action="uploadPath"
-              :show-file-list="false"
-              :headers="headers"
-              :on-success="uploadSpecPicUrl"
-              class="avatar-uploader"
-              accept=".jpg,.jpeg,.png,.gif"
-            >
-              <img v-if="specForm.picUrl" :src="specForm.picUrl" class="avatar">
-              <i v-else class="el-icon-plus avatar-uploader-icon" />
-            </el-upload>
-          </el-form-item>
-        </el-form>
-        <div slot="footer" class="dialog-footer">
-          <el-button @click="specVisiable = false">取消</el-button>
-          <el-button type="primary" @click="handleSpecificationAdd">确定</el-button>
-        </div>
-      </el-dialog>
     </el-card>
 
     <el-card class="box-card">
@@ -247,42 +136,6 @@
       </el-dialog>
     </el-card>
 
-    <el-card class="box-card">
-      <h3>商品参数</h3>
-      <el-button type="primary" @click="handleAttributeShow">添加</el-button>
-      <el-table :data="attributes">
-        <el-table-column property="attribute" label="商品参数名称" />
-        <el-table-column property="value" label="商品参数值" />
-        <el-table-column align="center" label="操作" width="100" class-name="small-padding fixed-width">
-          <template slot-scope="scope">
-            <el-button type="danger" size="mini" @click="handleAttributeDelete(scope.row)">删除</el-button>
-          </template>
-        </el-table-column>
-      </el-table>
-
-      <el-dialog :visible.sync="attributeVisiable" title="添加商品参数">
-        <el-form
-          ref="attributeForm"
-          :model="attributeForm"
-          status-icon
-          label-position="left"
-          label-width="100px"
-          style="width: 400px; margin-left:50px;"
-        >
-          <el-form-item label="商品参数名称" prop="attribute">
-            <el-input v-model="attributeForm.attribute" />
-          </el-form-item>
-          <el-form-item label="商品参数值" prop="value">
-            <el-input v-model="attributeForm.value" />
-          </el-form-item>
-        </el-form>
-        <div slot="footer" class="dialog-footer">
-          <el-button @click="attributeVisiable = false">取消</el-button>
-          <el-button type="primary" @click="handleAttributeAdd">确定</el-button>
-        </div>
-      </el-dialog>
-    </el-card>
-
     <div class="op-container">
       <el-button @click="handleCancel">取消</el-button>
       <el-button type="primary" @click="handlePublish">上架</el-button>
@@ -337,7 +190,8 @@
 </style>
 
 <script>
-import { publishGoods, listCatAndBrand } from '@/api/goods'
+import { publishGoods, listCatAndSupplier } from '@/api/goods'
+import { listBySupplier } from '@/api/brand'
 import { createStorage, uploadPath } from '@/api/storage'
 import Editor from '@tinymce/tinymce-vue'
 import { MessageBox } from 'element-ui'
@@ -354,6 +208,7 @@ export default {
       newKeyword: '',
       keywords: [],
       categoryList: [],
+      supplierList: [],
       brandList: [],
       goods: { picUrl: '', gallery: [], isHot: false, isNew: true, isOnSale: true },
       specVisiable: false,
@@ -401,9 +256,9 @@ export default {
 
   methods: {
     init: function() {
-      listCatAndBrand().then(response => {
+      listCatAndSupplier().then(response => {
         this.categoryList = response.data.data.categoryList
-        this.brandList = response.data.data.brandList
+        this.supplierList = response.data.data.supplierList
       })
     },
     handleCategoryChange(value) {
@@ -621,7 +476,12 @@ export default {
     handleAttributeDelete(row) {
       const index = this.attributes.indexOf(row)
       this.attributes.splice(index, 1)
-    }
+    },
+    getBrandBySupplier: function(value) {
+      listBySupplier(value).then(response => {
+        this.brandList = response.data.data
+      })
+    },
   }
 }
 </script>
