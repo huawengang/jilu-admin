@@ -3,67 +3,35 @@
 
     <!-- 查询和其他操作 -->
     <div class="filter-container">
-      <el-input v-model="listQuery.goodsId" clearable class="filter-item" style="width: 160px;" placeholder="请输入商品ID" />
-      <el-input v-model="listQuery.goodsSn" clearable class="filter-item" style="width: 160px;" placeholder="请输入商品编号" />
+      <el-input v-model="listQuery.stockId" clearable class="filter-item" style="width: 160px;" placeholder="请输入商品ID" />
+      <el-input v-model="listQuery.stockSn" clearable class="filter-item" style="width: 160px;" placeholder="请输入商品编号" />
       <el-input v-model="listQuery.name" clearable class="filter-item" style="width: 160px;" placeholder="请输入商品名称" />
       <el-button class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">查找</el-button>
-      <el-button class="filter-item" type="primary" icon="el-icon-edit" @click="handleCreate">添加</el-button>
+      <el-button class="filter-item" type="primary" icon="el-icon-edit" @click="handleInStock">入库</el-button>
       <el-button :loading="downloadLoading" class="filter-item" type="primary" icon="el-icon-download" @click="handleDownload">导出</el-button>
     </div>
 
     <!-- 查询结果 -->
     <el-table v-loading="listLoading" :data="list" element-loading-text="正在查询中。。。" fit highlight-current-row>
 
-      <el-table-column type="expand">
-        <template slot-scope="props">
-          <el-form label-position="left" class="table-expand">
-            <el-form-item label="商品编号">
-              <span>{{ props.row.goodsSn }}</span>
-            </el-form-item>
-            <el-form-item label="商品单位">
-              <span>{{ props.row.unit }}</span>
-            </el-form-item>
-            <el-form-item label="关键字">
-              <span>{{ props.row.keywords }}</span>
-            </el-form-item>
-            <el-form-item label="类目ID">
-              <span>{{ props.row.categoryId }}</span>
-            </el-form-item>
-            <el-form-item label="供应商ID">
-              <span>{{ props.row.supplierId }}</span>
-            </el-form-item>
-            <el-form-item label="供应商名称">
-              <span>{{ props.row.supplierName }}</span>
-            </el-form-item>
-            <el-form-item label="品牌商ID">
-              <span>{{ props.row.brandId }}</span>
-            </el-form-item>
-            <el-form-item label="品牌商名称">
-              <span>{{ props.row.brandName }}</span>
-            </el-form-item>
-          </el-form>
-        </template>
-      </el-table-column>
+      <el-table-column align="center" label="入库ID" prop="id" />
 
-      <el-table-column align="center" label="商品ID" prop="id" />
+      <el-table-column align="center" label="入库编号" prop="stockSn" />
 
-      <el-table-column align="center" min-width="100" label="名称" prop="name" />
+      <el-table-column align="center" label="入库时间" prop="stockTime" />
 
-      <el-table-column align="center" property="iconUrl" label="图片">
+      <el-table-column align="center" label="入库商品">
         <template slot-scope="scope">
-          <img :src="scope.row.picUrl" width="40">
+          <el-button type="primary" size="mini" @click="showStockGoods(scope.row)">查看</el-button>
         </template>
       </el-table-column>
 
-      <el-table-column align="center" label="市场价" prop="counterPrice" />
+      <el-table-column align="center" label="所在仓库" prop="warehouseId" />
 
-      <el-table-column align="center" label="当前价" prop="retailPrice" />
-
-      <el-table-column align="center" label="成本价" prop="costPrice" />
+      <el-table-column align="center" label="操作时间" prop="addTime" />
 
       <el-table-column align="center" label="操作" width="200" class-name="small-padding fixed-width">
         <template slot-scope="scope">
-          <el-button type="primary" size="mini" @click="handleUpdate(scope.row)">编辑</el-button>
           <el-button type="danger" size="mini" @click="handleDelete(scope.row)">删除</el-button>
         </template>
       </el-table-column>
@@ -74,6 +42,14 @@
     <el-tooltip placement="top" content="返回顶部">
       <back-to-top :visibility-height="100" />
     </el-tooltip>
+
+    <el-dialog title="入库" v-if='inStockVisible' :visible.sync="inStockVisible">
+      <in-stock @inStockOk="closeInStock"></in-stock>
+    </el-dialog>
+
+    <el-dialog title="入库商品" v-if='stockGoodsVisible' :visible.sync="stockGoodsVisible">
+      <stock-goods :stock-id="stockId"></stock-goods>
+    </el-dialog>
 
   </div>
 </template>
@@ -94,19 +70,21 @@
     width: 80px;
     margin-right: 10px;
   }
-  .goods-detail-box img {
+  .stock-detail-box img {
     width: 100%;
   }
 </style>
 
 <script>
-import { listGoods, deleteGoods } from '@/api/goods'
+import { listStock, deleteStock } from '@/api/stock'
 import BackToTop from '@/components/BackToTop'
 import Pagination from '@/components/Pagination' // Secondary package based on el-pagination
+import stockGoods from './comps/stockGoods'
+import inStock from './comps/inStock'
 
 export default {
-  name: 'GoodsList',
-  components: { BackToTop, Pagination },
+  name: 'StockList',
+  components: { BackToTop, Pagination, stockGoods, inStock },
   data() {
     return {
       list: [],
@@ -115,13 +93,14 @@ export default {
       listQuery: {
         page: 1,
         limit: 20,
-        goodsSn: undefined,
+        stockSn: undefined,
         name: undefined,
         sort: 'add_time',
         order: 'desc'
       },
-      goodsDetail: '',
-      detailDialogVisible: false,
+      stockId: 0,
+      inStockVisible: false,
+      stockGoodsVisible: false,
       downloadLoading: false
     }
   },
@@ -131,7 +110,8 @@ export default {
   methods: {
     getList() {
       this.listLoading = true
-      listGoods(this.listQuery).then(response => {
+      listStock(this.listQuery).then(response => {
+        console.log(response)
         this.list = response.data.data.list
         this.total = response.data.data.total
         this.listLoading = false
@@ -145,15 +125,15 @@ export default {
       this.listQuery.page = 1
       this.getList()
     },
-    handleCreate() {
-      this.$router.push({ path: '/goods/create' })
+    handleInStock() {
+      this.inStockVisible = true
     },
     handleUpdate(row) {
-      this.$router.push({ path: '/goods/edit', query: { id: row.id }})
+      this.$router.push({ path: '/stock/edit', query: { id: row.id }})
     },
-    showDetail(detail) {
-      this.goodsDetail = detail
-      this.detailDialogVisible = true
+    showStockGoods(row) {
+      this.stockGoodsVisible = true
+      this.stockId = row.id
     },
     handleDelete(row) {
       this.$confirm('确定要删除该吗？', '提示', {
@@ -161,7 +141,7 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        deleteGoods(row).then(response => {
+        deleteStock(row).then(response => {
           this.$notify.success({
             title: '成功',
             message: '删除成功'
@@ -181,11 +161,14 @@ export default {
         });
       });
     },
+    closeInStock() {
+      this.inStockVisible = false
+    },
     handleDownload() {
       this.downloadLoading = true
       import('@/vendor/Export2Excel').then(excel => {
         const tHeader = ['商品ID', '商品编号', '名称', '专柜价格', '当前价格', '是否新品', '是否热品', '是否在售', '首页主图', '宣传图片列表', '商品介绍', '详细介绍', '商品图片', '商品单位', '关键字', '类目ID', '品牌商ID']
-        const filterVal = ['id', 'goodsSn', 'name', 'counterPrice', 'retailPrice', 'isNew', 'isHot', 'isOnSale', 'listPicUrl', 'gallery', 'brief', 'detail', 'picUrl', 'goodsUnit', 'keywords', 'categoryId', 'brandId']
+        const filterVal = ['id', 'stockSn', 'name', 'counterPrice', 'retailPrice', 'isNew', 'isHot', 'isOnSale', 'listPicUrl', 'gallery', 'brief', 'detail', 'picUrl', 'stockUnit', 'keywords', 'categoryId', 'brandId']
         excel.export_json_to_excel2(tHeader, this.list, filterVal, '商品信息')
         this.downloadLoading = false
       })

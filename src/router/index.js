@@ -183,26 +183,6 @@ export const asyncRouterMap = [
         }
       },
       {
-        path: 'supplier',
-        component: () => import('@/views/mall/supplier'),
-        name: 'supplier',
-        meta: {
-          perms: ['GET /admin/supplier/list', 'POST /admin/supplier/create', 'GET /admin/supplier/read', 'POST /admin/supplier/update', 'POST /admin/supplier/delete'],
-          title: '供应商管理',
-          noCache: true
-        }
-      },
-      {
-        path: 'warehouse',
-        component: () => import('@/views/mall/warehouse'),
-        name: 'warehouse',
-        meta: {
-          perms: ['GET /admin/warehouse/list', 'POST /admin/warehouse/create', 'GET /admin/warehouse/read', 'POST /admin/warehouse/update', 'POST /admin/warehouse/delete'],
-          title: '仓库管理',
-          noCache: true
-        }
-      },
-      {
         path: 'category',
         component: () => import('@/views/mall/category'),
         name: 'category',
@@ -304,6 +284,36 @@ export const asyncRouterMap = [
         meta: {
           perms: ['GET /admin/comment/list', 'POST /admin/comment/delete'],
           title: '商品评论',
+          noCache: true
+        }
+      },
+      {
+        path: 'supplier',
+        component: () => import('@/views/goods/supplier'),
+        name: 'supplier',
+        meta: {
+          perms: ['GET /admin/supplier/list', 'POST /admin/supplier/create', 'GET /admin/supplier/read', 'POST /admin/supplier/update', 'POST /admin/supplier/delete'],
+          title: '供应商管理',
+          noCache: true
+        }
+      },
+      {
+        path: 'warehouse',
+        component: () => import('@/views/goods/warehouse'),
+        name: 'warehouse',
+        meta: {
+          perms: ['GET /admin/warehouse/list', 'POST /admin/warehouse/create', 'GET /admin/warehouse/read', 'POST /admin/warehouse/update', 'POST /admin/warehouse/delete'],
+          title: '仓库管理',
+          noCache: true
+        }
+      },
+      {
+        path: 'stock',
+        component: () => import('@/views/goods/stock'),
+        name: 'stockList',
+        meta: {
+          perms: ['GET /admin/stock/list', 'POST /admin/stock/delete'],
+          title: '库存管理',
           noCache: true
         }
       }
